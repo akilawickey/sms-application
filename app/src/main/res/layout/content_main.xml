@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:padding="15dp" >
+
 
     <EditText
         android:id="@+id/mobileNumber"
@@ -30,20 +33,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="10"
-        android:id="@+id/linearLayout">
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/sendViaIntent"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:text="Send"
+        android:text="web send"
         android:layout_above="@+id/send"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -58,5 +54,28 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="50dp" />
+
+
+
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stopService"
+        android:text="Stop Service"
+        android:layout_above="@+id/smsBody"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_alignStart="@+id/button1" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="startService"
+        android:text="Start Service"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/mobileNumber"
+        android:layout_alignEnd="@+id/mobileNumber" />
 
 </RelativeLayout>

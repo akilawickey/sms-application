@@ -1,6 +1,7 @@
 package asak.pro.sms_application;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,8 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.tuenti.smsradar.Sms;
+import com.tuenti.smsradar.SmsListener;
+import com.tuenti.smsradar.SmsRadar;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Button startService;
+    private Button stopService;
     private Button shareIntent;
     private Button send;
     private EditText phoneNo;
@@ -25,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //mapGui();
+        //hookListeners();
 
         phoneNo = (EditText)findViewById(R.id.mobileNumber);
         messageBody = (EditText)findViewById(R.id.smsBody);
@@ -39,7 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(number, null, sms, null, null);
+
+                    for(int i = 0;i<=10;i++){
+
+                        smsManager.sendTextMessage(number, null, sms, null, null);
+
+                    }
+
                     Toast.makeText(getApplicationContext(), "SMS Sent!",
                             Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
@@ -51,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        });
+            });
 
         shareIntent = (Button) findViewById(R.id.sendViaIntent);
         shareIntent.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +91,58 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+
+    }
+
+    private void mapGui() {
+      //  startService = (Button) findViewById(R.id.bt_start_service);
+//        stopService = (Button) findViewById(R.id.bt_stop_service);
+    }
+
+    private void hookListeners() {
+        startService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                initializeSmsRadarService();
+                Toast.makeText(getApplicationContext(), "Service started",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        stopService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                stopSmsRadarService();
+            }
+
+        });
+    }
+
+    private void initializeSmsRadarService() {
+        SmsRadar.initializeSmsRadarService(this, new SmsListener() {
+            @Override
+            public void onSmsSent(Sms sms) {
+                showSmsToast(sms);
+            }
+
+            @Override
+            public void onSmsReceived(Sms sms) {
+                showSmsToast(sms);
+            }
+        });
+    }
+
+    private void stopSmsRadarService() {
+        SmsRadar.stopSmsRadarService(this);
+    }
+
+    private void showSmsToast(Sms sms) {
+        Toast.makeText(this, sms.toString(), Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -98,5 +166,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Method to start the service
+    public void startService(View view) {
+        startService(new Intent(this, MyService.class));
+    }
+
+    // Stop the service
+    public void stopService(View view) {
+        stopService(new Intent(this, MyService.class));
     }
 }
