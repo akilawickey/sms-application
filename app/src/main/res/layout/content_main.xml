@@ -10,17 +10,6 @@
 
 
     <EditText
-        android:id="@+id/mobileNumber"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter phone number"
-        android:phoneNumber="true"
-        android:layout_above="@+id/smsBody"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-    </EditText>
-
-    <EditText
         android:id="@+id/smsBody"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -28,64 +17,40 @@
         android:hint="Enter message body"
         android:inputType="textMultiLine"
         android:lines="5"
-        android:layout_above="@+id/sendViaIntent"
+        android:layout_above="@+id/down"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-    <Button
-        android:id="@+id/sendViaIntent"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:text="web send"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/send"
-        android:layout_alignParentLeft="true" />
+        android:background="#e4b5b5" />
 
-    <Button
-        android:id="@+id/send"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:text="Send"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="stopService"
-        android:text="Stop Service"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/button1"
-        android:layout_toEndOf="@+id/button1"
-        android:layout_marginLeft="54dp"
-        android:layout_marginStart="54dp" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startService"
-        android:text="Start Service"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download Database"
+        android:text="Send Mesage"
         android:id="@+id/down"
-        android:layout_below="@+id/button1"
-        android:layout_toLeftOf="@+id/button2"
-        android:layout_toStartOf="@+id/button2"
-        android:layout_marginTop="39dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="38dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dept1"
+        android:id="@+id/one"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dept2"
+        android:id="@+id/two"
+        android:layout_below="@+id/one"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
 
 </RelativeLayout>

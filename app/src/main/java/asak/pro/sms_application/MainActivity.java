@@ -68,62 +68,62 @@ public class MainActivity extends AppCompatActivity {
         //mapGui();
         //hookListeners();
 
-        phoneNo = (EditText)findViewById(R.id.mobileNumber);
-        messageBody = (EditText)findViewById(R.id.smsBody);
+      //  phoneNo = (EditText)findViewById(R.id.mobileNumber);
+      //  messageBody = (EditText)findViewById(R.id.smsBody);
 
 
-        send = (Button)findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+      //  send = (Button)findViewById(R.id.send);
+      //  send.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 
 
-                String number = phoneNo.getText().toString();
-                String sms = messageBody.getText().toString();
+//                String number = phoneNo.getText().toString();
+//                String sms = messageBody.getText().toString();
+//
+//                try {
+//                    SmsManager smsManager = SmsManager.getDefault();
+//
+//                    ArrayList<String> parts = smsManager.divideMessage(sms);
+//                    smsManager.sendMultipartTextMessage(number, null, parts, null, null);
+//                   // for(int i = 0;i<=10;i++){
+//
+////                    }
+//
+//                    Toast.makeText(getApplicationContext(), "SMS Sent!",
+//                            Toast.LENGTH_LONG).show();
+//                } catch (Exception e) {
+//                    Toast.makeText(getApplicationContext(),
+//                            "SMS faild, please try again later!",
+//                            Toast.LENGTH_LONG).show();
+//                    e.printStackTrace();
+//                }
+//           }
 
-                try {
-                    SmsManager smsManager = SmsManager.getDefault();
-
-                    ArrayList<String> parts = smsManager.divideMessage(sms);
-                    smsManager.sendMultipartTextMessage(number, null, parts, null, null);
-                   // for(int i = 0;i<=10;i++){
-
+//
+//                });
+//        downbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new DownloadWebpageTask(new AsyncResult() {
+//                    @Override
+//                    public void onResult(JSONObject object) {
+//                        processJson(object);
 //                    }
-
-                    Toast.makeText(getApplicationContext(), "SMS Sent!",
-                            Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again later!",
-                            Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-
-
-                });
-        downbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DownloadWebpageTask(new AsyncResult() {
-                    @Override
-                    public void onResult(JSONObject object) {
-                        processJson(object);
-                    }
-                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
-                Toast.makeText(getApplicationContext(), "DB ok",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        shareIntent = (Button) findViewById(R.id.sendViaIntent);
-        shareIntent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-            }
-        });
+//                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
+//                Toast.makeText(getApplicationContext(), "DB ok",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        shareIntent = (Button) findViewById(R.id.sendViaIntent);
+//        shareIntent.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//
+//            }
+//        });
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void processJson(JSONObject object) {
-
+        String sms = messageBody.getText().toString();
         try {
             JSONArray rows = object.getJSONArray("rows");
 
@@ -157,16 +157,32 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray columns = row.getJSONArray("c");
 
                 //int position = columns.getJSONObject(0).getInt("v");
-                numset[r] = columns.getJSONObject(1).getInt("v");
+                int k = columns.getJSONObject(1).getInt("v");
 //                int wins = columns.getJSONObject(3).getInt("v");
 //                int draws = columns.getJSONObject(4).getInt("v");
 //                int losses = columns.getJSONObject(5).getInt("v");
 //                int points = columns.getJSONObject(19).getInt("v");
-                Toast.makeText(getApplicationContext(),numset[r] + "sad",
+                Toast.makeText(getApplicationContext(),k + " sad",
                         Toast.LENGTH_SHORT).show();
               //  Team team = new Team(position, name, wins, draws, losses, points);
              //   teams.add(team);
+
+
+
+
+                    SmsManager smsManager = SmsManager.getDefault();
+
+                    ArrayList<String> parts = smsManager.divideMessage(sms);
+                    smsManager.sendMultipartTextMessage(String.valueOf(k), null, parts, null, null);
+                    // for(int i = 0;i<=10;i++){
+
+//                    }
+
+                    Toast.makeText(getApplicationContext(), "SMS Sent!",
+                            Toast.LENGTH_LONG).show();
+
             }
+
 
             //final TeamsAdapter adapter = new TeamsAdapter(this, R.layout.team, teams);
           //  listview.setAdapter(adapter);
