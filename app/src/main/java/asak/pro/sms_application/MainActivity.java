@@ -1,7 +1,10 @@
 package asak.pro.sms_application;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +16,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tuenti.smsradar.Sms;
 import com.tuenti.smsradar.SmsListener;
 import com.tuenti.smsradar.SmsRadar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,13 +35,34 @@ public class MainActivity extends AppCompatActivity {
     private Button stopService;
     private Button shareIntent;
     private Button send;
+    private Button downbtn;
     private EditText phoneNo;
     private EditText messageBody;
+    ListView listview;
+    // this is for database download part
+    private static final String DEBUG_TAG = "HttpExample";
+    ArrayList<Team> teams = new ArrayList<Team>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        downbtn = (Button)findViewById(R.id.down);
+       // listview = (ListView) findViewById(R.id.listView);
+        //this is for database part
+        try {
+            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                downbtn.setEnabled(true);
+            } else {
+                downbtn.setEnabled(false);
+            }
+        }catch (Exception e){
+
+
+        }
 
         //mapGui();
         //hookListeners();
@@ -39,10 +70,12 @@ public class MainActivity extends AppCompatActivity {
         phoneNo = (EditText)findViewById(R.id.mobileNumber);
         messageBody = (EditText)findViewById(R.id.smsBody);
 
+
         send = (Button)findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 String number = phoneNo.getText().toString();
                 String sms = messageBody.getText().toString();
@@ -50,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
 
-                    for(int i = 0;i<=10;i++){
+                    ArrayList<String> parts = smsManager.divideMessage(sms);
+                    smsManager.sendMultipartTextMessage(number, null, parts, null, null);
+                   // for(int i = 0;i<=10;i++){
 
-                        smsManager.sendTextMessage(number, null, sms, null, null);
-
-                    }
+//                    }
 
                     Toast.makeText(getApplicationContext(), "SMS Sent!",
                             Toast.LENGTH_LONG).show();
@@ -67,8 +100,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            });
-
+                });
+        downbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DownloadWebpageTask(new AsyncResult() {
+                    @Override
+                    public void onResult(JSONObject object) {
+                        processJson(object);
+                    }
+                }).execute("https://spreadsheets.google.com/tq?key=1yyTcjWA6RAUwkI7sKOevWXAJfpITs__Zb0TwilihDCw");
+                Toast.makeText(getApplicationContext(), "DB ok",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
         shareIntent = (Button) findViewById(R.id.sendViaIntent);
         shareIntent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +139,40 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void buttonClickHandler(View view) {
+
+    }
+
+
+    private void processJson(JSONObject object) {
+
+        try {
+            JSONArray rows = object.getJSONArray("rows");
+
+            for (int r = 0; r < rows.length(); ++r) {
+                JSONObject row = rows.getJSONObject(r);
+                JSONArray columns = row.getJSONArray("c");
+
+                int position = columns.getJSONObject(0).getInt("v");
+                String name = columns.getJSONObject(1).getString("v");
+                int wins = columns.getJSONObject(3).getInt("v");
+                int draws = columns.getJSONObject(4).getInt("v");
+                int losses = columns.getJSONObject(5).getInt("v");
+                int points = columns.getJSONObject(19).getInt("v");
+                Toast.makeText(getApplicationContext(),name.toString(),
+                        Toast.LENGTH_SHORT).show();
+                Team team = new Team(position, name, wins, draws, losses, points);
+                teams.add(team);
+            }
+
+            //final TeamsAdapter adapter = new TeamsAdapter(this, R.layout.team, teams);
+          //  listview.setAdapter(adapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void mapGui() {
