@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText phoneNo;
     private EditText messageBody;
     ListView listview;
+    int numset[];
     // this is for database download part
     private static final String DEBUG_TAG = "HttpExample";
     ArrayList<Team> teams = new ArrayList<Team>();
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResult(JSONObject object) {
                         processJson(object);
                     }
-                }).execute("https://spreadsheets.google.com/tq?key=1yyTcjWA6RAUwkI7sKOevWXAJfpITs__Zb0TwilihDCw");
+                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
                 Toast.makeText(getApplicationContext(), "DB ok",
                         Toast.LENGTH_SHORT).show();
             }
@@ -155,22 +156,22 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject row = rows.getJSONObject(r);
                 JSONArray columns = row.getJSONArray("c");
 
-                int position = columns.getJSONObject(0).getInt("v");
-                String name = columns.getJSONObject(1).getString("v");
-                int wins = columns.getJSONObject(3).getInt("v");
-                int draws = columns.getJSONObject(4).getInt("v");
-                int losses = columns.getJSONObject(5).getInt("v");
-                int points = columns.getJSONObject(19).getInt("v");
-                Toast.makeText(getApplicationContext(),name.toString(),
+                //int position = columns.getJSONObject(0).getInt("v");
+                numset[r] = columns.getJSONObject(1).getInt("v");
+//                int wins = columns.getJSONObject(3).getInt("v");
+//                int draws = columns.getJSONObject(4).getInt("v");
+//                int losses = columns.getJSONObject(5).getInt("v");
+//                int points = columns.getJSONObject(19).getInt("v");
+                Toast.makeText(getApplicationContext(),numset[r] + "sad",
                         Toast.LENGTH_SHORT).show();
-                Team team = new Team(position, name, wins, draws, losses, points);
-                teams.add(team);
+              //  Team team = new Team(position, name, wins, draws, losses, points);
+             //   teams.add(team);
             }
 
             //final TeamsAdapter adapter = new TeamsAdapter(this, R.layout.team, teams);
           //  listview.setAdapter(adapter);
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
