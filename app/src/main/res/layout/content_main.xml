@@ -15,10 +15,9 @@
         android:layout_height="wrap_content"
         android:hint="Enter phone number"
         android:phoneNumber="true"
-        android:layout_below="@+id/linearLayout"
+        android:layout_above="@+id/smsBody"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp">
+        android:layout_alignParentStart="true">
     </EditText>
 
     <EditText
@@ -29,9 +28,9 @@
         android:hint="Enter message body"
         android:inputType="textMultiLine"
         android:lines="5"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/sendViaIntent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
     <Button
@@ -40,9 +39,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="5"
         android:text="web send"
+        android:layout_alignParentStart="true"
         android:layout_above="@+id/send"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:id="@+id/send"
@@ -52,8 +51,7 @@
         android:text="Send"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="50dp" />
+        android:layout_alignParentStart="true" />
 
 
 
@@ -64,9 +62,11 @@
         android:layout_height="wrap_content"
         android:onClick="stopService"
         android:text="Stop Service"
-        android:layout_above="@+id/smsBody"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignStart="@+id/button1" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/button1"
+        android:layout_toEndOf="@+id/button1"
+        android:layout_marginLeft="54dp"
+        android:layout_marginStart="54dp" />
 
     <Button
         android:id="@+id/button1"
@@ -75,7 +75,17 @@
         android:onClick="startService"
         android:text="Start Service"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/mobileNumber"
-        android:layout_alignEnd="@+id/mobileNumber" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download Database"
+        android:id="@+id/down"
+        android:layout_below="@+id/button1"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2"
+        android:layout_marginTop="39dp" />
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
+
         applicationId "asak.pro.sms_application"
         minSdkVersion 14
         targetSdkVersion 23
@@ -25,4 +26,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.tuenti.smsradar:library:1.0.4'
+
+
 }
