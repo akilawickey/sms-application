@@ -1,45 +1,37 @@
 package asak.pro.sms_application;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.tuenti.smsradar.Sms;
-import com.tuenti.smsradar.SmsListener;
-import com.tuenti.smsradar.SmsRadar;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button startService;
-    private Button stopService;
-    private Button shareIntent;
+
     private Button send;
     private Button downbtn;
     private EditText phoneNo;
     private EditText messageBody;
+    private CheckBox ch1;
+    private CheckBox ch2;
+
     ListView listview;
     int numset[];
+    static int selection_dept1,selection_dept2 = 0;
     // this is for database download part
     private static final String DEBUG_TAG = "HttpExample";
     ArrayList<Team> teams = new ArrayList<Team>();
@@ -52,6 +44,41 @@ public class MainActivity extends AppCompatActivity {
         downbtn = (Button)findViewById(R.id.down);
        // listview = (ListView) findViewById(R.id.listView);
         //this is for database part
+        CheckBox ch1 = (CheckBox)findViewById(R.id.one);
+        CheckBox ch2 = (CheckBox)findViewById(R.id.two);
+
+        ch1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((CheckBox) v).isChecked()) {
+                    Toast.makeText(getApplicationContext(), "select dep1",
+                            Toast.LENGTH_LONG).show();
+                    selection_dept1 = 1;
+                }else {
+                    Toast.makeText(getApplicationContext(), "deselect dept1",
+                            Toast.LENGTH_LONG).show();
+                    selection_dept1 = 0;
+                }
+            }
+        });
+        ch2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((CheckBox) v).isChecked()) {
+                    Toast.makeText(getApplicationContext(), "select dep2",
+                            Toast.LENGTH_LONG).show();
+                    selection_dept2 = 2;
+                } else {
+                    Toast.makeText(getApplicationContext(), "deselect dept2",
+                            Toast.LENGTH_LONG).show();
+                    selection_dept2 = 0;
+                }
+            }
+        });
+
+
         try {
             ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -65,84 +92,22 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        //mapGui();
-        //hookListeners();
 
-      //  phoneNo = (EditText)findViewById(R.id.mobileNumber);
-      //  messageBody = (EditText)findViewById(R.id.smsBody);
-
-
-      //  send = (Button)findViewById(R.id.send);
-      //  send.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-
-
-//                String number = phoneNo.getText().toString();
-//                String sms = messageBody.getText().toString();
-//
-//                try {
-//                    SmsManager smsManager = SmsManager.getDefault();
-//
-//                    ArrayList<String> parts = smsManager.divideMessage(sms);
-//                    smsManager.sendMultipartTextMessage(number, null, parts, null, null);
-//                   // for(int i = 0;i<=10;i++){
-//
-////                    }
-//
-//                    Toast.makeText(getApplicationContext(), "SMS Sent!",
-//                            Toast.LENGTH_LONG).show();
-//                } catch (Exception e) {
-//                    Toast.makeText(getApplicationContext(),
-//                            "SMS faild, please try again later!",
-//                            Toast.LENGTH_LONG).show();
-//                    e.printStackTrace();
-//                }
-//           }
-
-//
-//                });
-//        downbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new DownloadWebpageTask(new AsyncResult() {
-//                    @Override
-//                    public void onResult(JSONObject object) {
-//                        processJson(object);
-//                    }
-//                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
-//                Toast.makeText(getApplicationContext(), "DB ok",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        shareIntent = (Button) findViewById(R.id.sendViaIntent);
-//        shareIntent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//
-//            }
-//        });
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        downbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                new DownloadWebpageTask(new AsyncResult() {
+                    @Override
+                    public void onResult(JSONObject object) {
+                        processJson(object);
+                    }
+                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
+                Toast.makeText(getApplicationContext(), "DB ok",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
 
-
-    }
-
-    public void buttonClickHandler(View view) {
 
     }
 
@@ -162,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 //                int draws = columns.getJSONObject(4).getInt("v");
 //                int losses = columns.getJSONObject(5).getInt("v");
 //                int points = columns.getJSONObject(19).getInt("v");
-                Toast.makeText(getApplicationContext(),k + " sad",
+                Toast.makeText(getApplicationContext(),k + " Sending ...",
                         Toast.LENGTH_SHORT).show();
               //  Team team = new Team(position, name, wins, draws, losses, points);
              //   teams.add(team);
@@ -192,49 +157,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void mapGui() {
-      //  startService = (Button) findViewById(R.id.bt_start_service);
-//        stopService = (Button) findViewById(R.id.bt_stop_service);
-    }
 
-    private void hookListeners() {
-        startService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                initializeSmsRadarService();
-                Toast.makeText(getApplicationContext(), "Service started",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        stopService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                stopSmsRadarService();
-            }
-
-        });
-    }
-
-    private void initializeSmsRadarService() {
-        SmsRadar.initializeSmsRadarService(this, new SmsListener() {
-            @Override
-            public void onSmsSent(Sms sms) {
-                showSmsToast(sms);
-            }
-
-            @Override
-            public void onSmsReceived(Sms sms) {
-                showSmsToast(sms);
-            }
-        });
-    }
-
-    private void stopSmsRadarService() {
-        SmsRadar.stopSmsRadarService(this);
-    }
 
     private void showSmsToast(Sms sms) {
         Toast.makeText(this, sms.toString(), Toast.LENGTH_LONG).show();
@@ -264,13 +188,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Method to start the service
-    public void startService(View view) {
-        startService(new Intent(this, MyService.class));
-    }
 
-    // Stop the service
-    public void stopService(View view) {
-        stopService(new Intent(this, MyService.class));
-    }
 }
