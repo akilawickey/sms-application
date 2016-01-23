@@ -166,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
               //  Team team = new Team(position, name, wins, draws, losses, points);
              //   teams.add(team);
+/*
 
-
-
-
+                    send the sms message using sms manager
+*/
                     SmsManager smsManager = SmsManager.getDefault();
 
                     ArrayList<String> parts = smsManager.divideMessage(sms);
