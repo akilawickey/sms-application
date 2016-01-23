@@ -44,7 +44,18 @@ public class SmsReceiver extends BroadcastReceiver {
             }
 
             // Display the entire SMS Message
-            Toast.makeText(context,str, Toast.LENGTH_LONG).show();
+
+            if(str.substring(24,27).equals("yes")){
+                Toast.makeText(context, "user said yes",
+                        Toast.LENGTH_LONG).show();
+
+            }else{
+
+                Toast.makeText(context, "user says no",
+                        Toast.LENGTH_LONG).show();
+            }
+
+           // Toast.makeText(context,str.substring(24,27), Toast.LENGTH_LONG).show();
             Log.d(TAG, str);
         }
     }
