@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private Button downbtn;
     private EditText phoneNo;
     private EditText messageBody;
+    private CheckBox ch1;
+    private CheckBox ch2;
+    static int dept1_select = 0,dept2_select = 0;
+    static String s = null;
+    static String sms = null;
     ListView listview;
     int numset[];
     // this is for database download part
@@ -38,8 +44,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         downbtn = (Button) findViewById(R.id.down);
+        messageBody = (EditText)findViewById(R.id.smsBody);
         // listview = (ListView) findViewById(R.id.listView);
         //this is for database part
+        CheckBox ch1 = (CheckBox)findViewById(R.id.one);
+        CheckBox ch2 = (CheckBox)findViewById(R.id.two);
+
+        ch1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    dept1_select = 1;
+                    Toast.makeText(getApplicationContext(), "Dept1 selected!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    dept1_select = 0;
+                    Toast.makeText(getApplicationContext(), "Dept1 deselected!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        ch2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    dept2_select = 1;
+                    Toast.makeText(getApplicationContext(), "Dept2 selected!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    dept2_select = 0;
+                    Toast.makeText(getApplicationContext(), "Dept2 deselected!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         try {
             ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -56,22 +96,53 @@ public class MainActivity extends AppCompatActivity {
         downbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadWebpageTask(new AsyncResult() {
-                    @Override
-                    public void onResult(JSONObject object) {
-                        processJson(object);
-                    }
-                }).execute("https://spreadsheets.google.com/tq?key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
-                Toast.makeText(getApplicationContext(), "DB ok",
-                        Toast.LENGTH_SHORT).show();
+
+                if(dept1_select == 0 && dept2_select == 0){
+
+                    new DownloadWebpageTask(new AsyncResult() {
+                        @Override
+                        public void onResult(JSONObject object) {
+                            processJson(object);
+                        }
+                    }).execute("https://spreadsheets.google.com/tq?&key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw");
+                    Toast.makeText(getApplicationContext(), "DB Connection Established",
+                            Toast.LENGTH_SHORT).show();
+
+
+                }else {
+
+                        if ((dept1_select == 1)&&(dept2_select == 1)){
+                            s = "%20D%20=%20%22dept2%22%20OR%20D%20=%20%22dept1";
+
+                        }else if((dept1_select == 1)&&(dept2_select == 0)){
+                            s = "%20D%20=%20%22dept1";
+                        }else if((dept1_select == 0)&&(dept2_select == 1)){
+                            s = "%20D%20=%20%22dept2";
+                        }
+                    //https://spreadsheets.google.com/tq?tq=select%20A%20where %20D%20=%20%22dept2%22%20&key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw
+                    String pass = "https://spreadsheets.google.com/tq?tq=select%20B%20where"+s+"%22%20&key=16QYE-NrOgCcHMlD_o1EDBTrrGrGelYm7Lw5405ZxuFw";
+                    new DownloadWebpageTask(new AsyncResult() {
+                        @Override
+                        public void onResult(JSONObject object) {
+                            processJson(object);
+                        }
+                    }).execute(pass);
+                    Toast.makeText(getApplicationContext(), "DB Connection Established",
+                            Toast.LENGTH_SHORT).show();
+
+
+                }
+
+
             }
         });
 
     }
 
     private void processJson(JSONObject object) {
-        String sms = messageBody.getText().toString();
+
         try {
+
             JSONArray rows = object.getJSONArray("rows");
 
             for (int r = 0; r < rows.length(); ++r) {
@@ -79,26 +150,24 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray columns = row.getJSONArray("c");
 
                 //int position = columns.getJSONObject(0).getInt("v");
-                int k = columns.getJSONObject(1).getInt("v");
+                int k = columns.getJSONObject(0).getInt("v");
 //                int wins = columns.getJSONObject(3).getInt("v");
 //                int draws = columns.getJSONObject(4).getInt("v");
 //                int losses = columns.getJSONObject(5).getInt("v");
 //                int points = columns.getJSONObject(19).getInt("v");
-                Toast.makeText(getApplicationContext(), k + " sad",
+                Toast.makeText(getApplicationContext(), k + " sending...",
                         Toast.LENGTH_SHORT).show();
                 //  Team team = new Team(position, name, wins, draws, losses, points);
                 //   teams.add(team);
 
 
                 SmsManager smsManager = SmsManager.getDefault();
-
+                sms = messageBody.getText().toString();
                 ArrayList<String> parts = smsManager.divideMessage(sms);
                 smsManager.sendMultipartTextMessage(String.valueOf(k), null, parts, null, null);
-                // for(int i = 0;i<=10;i++){
 
-//                    }
 
-                Toast.makeText(getApplicationContext(), "SMS Sent!",
+                Toast.makeText(getApplicationContext(), "SMS Sent",
                         Toast.LENGTH_LONG).show();
 
             }
