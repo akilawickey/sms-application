@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     static String sms = null;
     ListView listview;
     int numset[];
+    DataBaseHandler db;
+    Time today = new Time(Time.getCurrentTimezone());
+
     // this is for database download part
     private static final String DEBUG_TAG = "HttpExample";
     ArrayList<Team> teams = new ArrayList<Team>();
@@ -49,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
         //this is for database part
         CheckBox ch1 = (CheckBox)findViewById(R.id.one);
         CheckBox ch2 = (CheckBox)findViewById(R.id.two);
+
+        db = new DataBaseHandler(this); //create a new database handler object
+        List<Contact> contacts = db.getAllContacts();
+        for (Contact cn : contacts) {
+            String log = "ID:" + cn.getID() + " Name: " + cn.getName();
+            // Writing Contacts to log
+            //Log.d("Result: ", log);
+            System.out.println(log);
+            // add contacts data in arrayList
+
+        }
+
 
         ch1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         downbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
 
                 if(dept1_select == 0 && dept2_select == 0){
 
@@ -160,9 +180,21 @@ public class MainActivity extends AppCompatActivity {
                 //  Team team = new Team(position, name, wins, draws, losses, points);
                 //   teams.add(team);
 
+                today.setToNow();
+                String date = today.format("%Y-%m-%d %H:%M:%S");
+
+                int rand = (int)(Math.random() * (100 - 10) + 10);
+
+                //   System.out.println(date.toString().substring(17, 19)+rand);
+
+                String rand_final = date.toString().substring(17, 19)+rand;
+
+                db.addContact(new Contact(date + "\n" +rand_final));
 
                 SmsManager smsManager = SmsManager.getDefault();
                 sms = messageBody.getText().toString();
+
+                sms = sms + " \n Send your reply as "+rand_final +"<space>option";
                 ArrayList<String> parts = smsManager.divideMessage(sms);
                 smsManager.sendMultipartTextMessage(String.valueOf(k), null, parts, null, null);
 
