@@ -1,6 +1,7 @@
 package asak.pro.sms_application;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,51 +22,55 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import asak.pro.sms_application.services.DatabaseService;
+import asak.pro.sms_application.services.models.Response_yes_no;
+import asak.pro.sms_application.services.models.ServiceConstants;
 
+public class MainActivity extends AppCompatActivity implements ServiceConstants {
+
+    // this is for database download part
+    private static final String DEBUG_TAG = "HttpExample";
+    static int dept1_select = 0, dept2_select = 0;
+    static String s = null;
+    static String sms = null;
+    ListView listview;
+    int numset[];
+    Time today = new Time(Time.getCurrentTimezone());
+    DatabaseService db;
+    ArrayList<Team> teams = new ArrayList<Team>();
     private Button startService;
     private Button stopService;
     private Button shareIntent;
     private Button send;
+    private Button analize;
     private Button downbtn;
     private EditText phoneNo;
     private EditText messageBody;
     private CheckBox ch1;
     private CheckBox ch2;
-    static int dept1_select = 0,dept2_select = 0;
-    static String s = null;
-    static String sms = null;
-    ListView listview;
-    int numset[];
-    DataBaseHandler db;
-    Time today = new Time(Time.getCurrentTimezone());
-
-    // this is for database download part
-    private static final String DEBUG_TAG = "HttpExample";
-    ArrayList<Team> teams = new ArrayList<Team>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         downbtn = (Button) findViewById(R.id.down);
+        analize = (Button) findViewById(R.id.analize);
         messageBody = (EditText)findViewById(R.id.smsBody);
         // listview = (ListView) findViewById(R.id.listView);
         //this is for database part
         CheckBox ch1 = (CheckBox)findViewById(R.id.one);
         CheckBox ch2 = (CheckBox)findViewById(R.id.two);
 
-        db = new DataBaseHandler(this); //create a new database handler object
-        List<Contact> contacts = db.getAllContacts();
-        for (Contact cn : contacts) {
-            String log = "ID:" + cn.getID() + " Name: " + cn.getName();
+        db = new DatabaseService(this); //create a new database handler object
+        // List<Contact> contacts = db.getAllContacts();
+        //   for (Contact cn : contacts) {
+        //      String log = "ID:" + cn.getID() + " Name: " + cn.getName();
             // Writing Contacts to log
             //Log.d("Result: ", log);
-            System.out.println(log);
+        //     System.out.println(log);
             // add contacts data in arrayList
 
-        }
+        //    }
 
 
         ch1.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
 
         downbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,13 +170,30 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             JSONArray rows = object.getJSONArray("rows");
+            today.setToNow();
+            String date = today.format("%Y-%m-%d %H:%M:%S");
 
+            int rand = (int) (Math.random() * (100 - 10) + 10);
+            String msgid = "asass";
+            //   System.out.println(date.toString().substring(17, 19)+rand); 3593
+
+            String rand_final = date.toString().substring(17, 19) + rand;
+
+            Toast.makeText(getApplicationContext(), rand_final,
+                    Toast.LENGTH_LONG).show();
+
+            db.insertReceiver(msgid, rand_final, TYPE_YES_NO);
+            db.initiateYesNoResponseTable(msgid);
+
+            ArrayList<String> num = new ArrayList<>();
             for (int r = 0; r < rows.length(); ++r) {
                 JSONObject row = rows.getJSONObject(r);
                 JSONArray columns = row.getJSONArray("c");
 
-                //int position = columns.getJSONObject(0).getInt("v");
+                //int position = columns."+94"+String.valueOf(k)getJSONObject(0).getInt("v");
                 int k = columns.getJSONObject(0).getInt("v");
+                num.add("+94" + String.valueOf(k));
+                Log.i("smsreceiver", "+94" + String.valueOf(k));
 //                int wins = columns.getJSONObject(3).getInt("v");
 //                int draws = columns.getJSONObject(4).getInt("v");
 //                int losses = columns.getJSONObject(5).getInt("v");
@@ -180,16 +203,8 @@ public class MainActivity extends AppCompatActivity {
                 //  Team team = new Team(position, name, wins, draws, losses, points);
                 //   teams.add(team);
 
-                today.setToNow();
-                String date = today.format("%Y-%m-%d %H:%M:%S");
 
-                int rand = (int)(Math.random() * (100 - 10) + 10);
-
-                //   System.out.println(date.toString().substring(17, 19)+rand);
-
-                String rand_final = date.toString().substring(17, 19)+rand;
-
-                db.addContact(new Contact(date + "\n" +rand_final));
+                //db.addContact(new Contact(date + "\n" +rand_final));
 
                 SmsManager smsManager = SmsManager.getDefault();
                 sms = messageBody.getText().toString();
@@ -203,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
 
             }
-
-
+//            num.add("+94775455047");
+            db.insertPhoneNumbers(msgid, num);
             //final TeamsAdapter adapter = new TeamsAdapter(this, R.layout.team, teams);
             //  listview.setAdapter(adapter);
 
@@ -234,6 +249,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void click_view(View v) {
+
+        startActivity(new Intent(this, reply_view_handler.class));
+
     }
 
 }

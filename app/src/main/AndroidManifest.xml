@@ -3,6 +3,7 @@
     package="asak.pro.sms_application" >
 
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS"/>
@@ -31,7 +32,7 @@
         </activity>
 
         <receiver
-            android:name=".SmsReceiver"
+            android:name=".services.SmsReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="999">
@@ -39,9 +40,6 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".MyService"
-            android:enabled="true" />
     </application>
 
 

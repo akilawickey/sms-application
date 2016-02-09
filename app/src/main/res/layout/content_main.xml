@@ -13,44 +13,53 @@
         android:id="@+id/smsBody"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="top"
-        android:hint="Enter message body"
-        android:inputType="textMultiLine"
-        android:lines="5"
         android:layout_above="@+id/down"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#e4b5b5" />
+        android:background="#e4b5b5"
+        android:gravity="top"
+        android:hint="Enter message body"
+        android:inputType="textMultiLine"
+        android:lines="5" />
 
 
     <Button
+        android:id="@+id/down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Mesage"
-        android:id="@+id/down"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="38dp" />
+        android:layout_marginBottom="38dp"
+        android:text="Send Mesage" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dept1"
         android:id="@+id/one"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="43dp"
-        android:checked="false" />
-
-    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dept2"
-        android:id="@+id/two"
-        android:layout_below="@+id/one"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:checked="false" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="43dp"
+        android:checked="false"
+        android:text="Dept1" />
+
+    <CheckBox
+        android:id="@+id/two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/one"
+        android:checked="false"
+        android:text="Dept2" />
+
+    <Button
+        android:id="@+id/analize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="click_view"
+        android:text="Analize" />
 
 </RelativeLayout>
