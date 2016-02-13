@@ -327,6 +327,9 @@ public class DatabaseService implements DatabaseConstants, ServiceConstants {
 
         } else {
             closeConnection();
+//            Response_yes_no response_yes_no = new Response_yes_no();
+//            response_yes_no.setNo(0);
+//            response_yes_no.setYes(0);
             return null;
         }
 
