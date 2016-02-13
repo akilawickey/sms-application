@@ -47,7 +47,7 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
 //
 //
 
-        Log.i(TAG, "error is .............--------: ");
+
 
 
         bt = (Button) findViewById(R.id.search);
@@ -62,8 +62,13 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
             @Override
             public void onClick(View v) {
 
-                Response_yes_no a = db.getCountYesNo("2127");
-                int t = a.getNo();
+
+                Response_yes_no a = db.getCountYesNo("2433");
+                int t = a.getYes();
+
+
+               /* int t = a.getNo(); */
+
                 Toast.makeText(getApplicationContext(), t + " count",
                         Toast.LENGTH_LONG).show();
 

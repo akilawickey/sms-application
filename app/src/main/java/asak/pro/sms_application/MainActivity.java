@@ -185,10 +185,11 @@ public class MainActivity extends AppCompatActivity implements ServiceConstants 
             String date = today.format("%Y-%m-%d %H:%M:%S");
 
             int rand = (int) (Math.random() * (100 - 10) + 10);
-            String msgid = "asass";
+
             //   System.out.println(date.toString().substring(17, 19)+rand); 3593
 
             String rand_final = date.toString().substring(17, 19) + rand;
+            String msgid = rand_final;
 
             Toast.makeText(getApplicationContext(), rand_final,
                     Toast.LENGTH_LONG).show();
