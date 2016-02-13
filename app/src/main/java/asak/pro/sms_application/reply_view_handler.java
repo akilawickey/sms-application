@@ -30,7 +30,7 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
     private static String TAG = "ado";
     private EditText et;
     private TextView tx;
-    private Button bt;
+    private Button bt, getit;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
 
 
         bt = (Button) findViewById(R.id.search);
+        getit = (Button) findViewById(R.id.getit);
         tx = (TextView) findViewById(R.id.textView2);
         et = (EditText) findViewById(R.id.editText);
 
@@ -63,15 +64,28 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
             public void onClick(View v) {
 
 
-                Response_yes_no a = db.getCountYesNo("2433");
+                Response_yes_no a = db.getCountYesNo("jjpn");
                 int t = a.getYes();
+                int f = a.getNo();
 
 
                /* int t = a.getNo(); */
 
-                Toast.makeText(getApplicationContext(), t + " count",
+                Toast.makeText(getApplicationContext(), " No Count " + t + " \n " + " yes count " + f,
                         Toast.LENGTH_LONG).show();
+                tx.append(" No Count " + t + " \n " + " yes count " + f);
 
+            }
+        });
+
+        getit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Receiver_details a = db.getMsgId("jjpn");
+
+                Toast.makeText(getApplicationContext(), "hello",
+                        Toast.LENGTH_LONG).show();
+                //   tx.append(" No Count "+t+" \n "+" yes count "+f);
 
             }
         });

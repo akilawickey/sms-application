@@ -188,10 +188,17 @@ public class MainActivity extends AppCompatActivity implements ServiceConstants 
 
             //   System.out.println(date.toString().substring(17, 19)+rand); 3593
 
-            String rand_final = date.toString().substring(17, 19) + rand;
-            String msgid = rand_final;
 
-            Toast.makeText(getApplicationContext(), rand_final,
+            String rand_final = date.toString().substring(17, 19) + rand;
+            // String msgid = "tyuy";
+            final int PASSWORD_LENGTH = 4;
+            StringBuffer sb = new StringBuffer();
+            for (int x = 0; x < PASSWORD_LENGTH; x++) {
+                sb.append((char) ((int) (Math.random() * 26) + 97));
+            }
+            String msgid = sb.toString();
+
+            Toast.makeText(getApplicationContext(), msgid,
                     Toast.LENGTH_LONG).show();
 
             db.insertReceiver(msgid, rand_final, TYPE_YES_NO);
