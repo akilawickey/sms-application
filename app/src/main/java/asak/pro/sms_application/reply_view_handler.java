@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.logging.Logger;
 
 import asak.pro.sms_application.services.DatabaseService;
+import asak.pro.sms_application.services.SmsReceiver;
 import asak.pro.sms_application.services.models.Receiver_details;
 import asak.pro.sms_application.services.models.Response_yes_no;
 import asak.pro.sms_application.services.models.ServiceConstants;
@@ -27,14 +28,9 @@ import asak.pro.sms_application.services.models.ServiceConstants;
 public class reply_view_handler extends AppCompatActivity implements ServiceConstants {
 
     private static String TAG = "ado";
-    private DatabaseService db;
     private EditText et;
     private TextView tx;
     private Button bt;
-
-
-
-
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -42,9 +38,14 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
         // Get the view from new_activity.xml
         setContentView(R.layout.reply_view);
 
+        final DatabaseService db = new DatabaseService(this);
 
-        db = new DatabaseService(this);
 
+        //    long c = db.getPhoneNumberCount("2127");
+//        Response_yes_no s = db.getCountYesNo("2127");
+//
+//
+//
 
         Log.i(TAG, "error is .............--------: ");
 
@@ -61,19 +62,11 @@ public class reply_view_handler extends AppCompatActivity implements ServiceCons
             @Override
             public void onClick(View v) {
 
+                Response_yes_no a = db.getCountYesNo("2127");
+                int t = a.getNo();
+                Toast.makeText(getApplicationContext(), t + " count",
+                        Toast.LENGTH_LONG).show();
 
-                // Response_yes_no x = db.getCountYesNo("3779").getYes();
-                //2127
-//                long x = db.getPhoneNumberCount("2127");
-//                tx.append("hello user"+x);
-//                Response_yes_no a = new Response_yes_no();
-//                a = db.getCountYesNo("2127");
-//
-//                Toast.makeText(savedInstanceState, "No Yeses: " + db.getCountYesNo("2127").getYes(),
-//                        Toast.LENGTH_LONG).show();
-                //      int a = db.getCountYesNo("2127").getYes();
-                //int x = a.getNo();
-                //   tx.append("num - "+x);
 
             }
         });
