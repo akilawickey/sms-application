@@ -20,7 +20,7 @@ import asak.pro.sms_application.services.models.ServiceConstants;
  * Created by maanadev on 1/23/16.
  */
 public class DatabaseService implements DatabaseConstants, ServiceConstants {
-
+    private static String TAG = "DB";
 
     //===================================================================================================================================
     //==========================================LOCAL VARIABLES=============================================================
@@ -275,8 +275,26 @@ public class DatabaseService implements DatabaseConstants, ServiceConstants {
 
         SQLiteDatabase db = openConnection();
         String table = msgId + PHONE_NUMBER_TABLE_NAME;
-        long count = DatabaseUtils.queryNumEntries(db, table);
+        //CHECK WHETHER TABLE EXISTS
+        Cursor cursor = db.rawQuery("select * from sqlite_master where tbl_name = '" + table + "'", null);
+
+        long count = 0;
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+
+                Log.i(TAG, "exist");
+                count = DatabaseUtils.queryNumEntries(db, table);
+
+            } else {
+                Log.i(TAG, "Not exist");
+                cursor.close();
+            }
+        }
+
         closeConnection();
+
+
         return count;
     }
 

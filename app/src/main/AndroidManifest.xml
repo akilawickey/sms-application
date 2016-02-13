@@ -30,6 +30,7 @@
 
 
         </activity>
+        <activity android:name=".reply_view_handler"></activity>
 
         <receiver
             android:name=".services.SmsReceiver"

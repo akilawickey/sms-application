@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.gsm.SmsMessage;
 import android.util.Log;
-
+import android.widget.Toast;
 import asak.pro.sms_application.services.models.Receiver_details;
 import asak.pro.sms_application.services.models.ServiceConstants;
 
-/**
- * Created by root on 1/20/16.
- */
+
 public class SmsReceiver extends BroadcastReceiver implements ServiceConstants {
 
     private static String TAG = "smsreceiver";
@@ -79,7 +77,8 @@ public class SmsReceiver extends BroadcastReceiver implements ServiceConstants {
 //                        Toast.makeText(context,String.valueOf(db.getCountYesNo(msgDetail.getMsgId()).getYes()),
 //                                Toast.LENGTH_LONG).show();
                         Log.i(TAG, "No Yeses: " + db.getCountYesNo(msgDetail.getMsgId()).getYes());
-
+                        Toast.makeText(context, "No Yeses: " + db.getCountYesNo(msgDetail.getMsgId()).getYes(),
+                                Toast.LENGTH_LONG).show();
                     } else {
                         Log.i(TAG, "Number is not Valid!!");
                     }

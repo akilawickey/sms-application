@@ -87,6 +87,17 @@ public class MainActivity extends AppCompatActivity implements ServiceConstants 
                 }
             }
         });
+        analize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, reply_view_handler.class);
+
+                startActivity(intent);
+
+            }
+        });
+
 
         ch2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,10 +262,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConstants 
         return super.onOptionsItemSelected(item);
     }
 
-    public void click_view(View v) {
 
-        startActivity(new Intent(this, reply_view_handler.class));
-
-    }
 
 }
