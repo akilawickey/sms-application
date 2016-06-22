@@ -1,8 +1,6 @@
 package asak.pro.sms_application.services;
 
-/**
- * Created by maanadev on 1/25/16.
- */
+//author maanadev
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
